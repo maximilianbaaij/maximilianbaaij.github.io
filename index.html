@@ -13,11 +13,13 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.linkedin.com/in/maximilianbaaij/">
     
+    <!-- FAVICON (Transparentes Kern-Symbol) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='none' stroke='%23C05621' stroke-width='8'/><circle cx='50' cy='50' r='15' fill='%23C05621'/></svg>" type="image/svg+xml">
+    
     <!-- Tailwind CSS (Wird immer geladen, da essentiell für das Layout) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- HINWEIS: Google Fonts werden jetzt erst per JS geladen, um die DSGVO-Zustimmung abwarten. -->
-    <!-- Fallback-Fonts sind in der CSS-Konfiguration definiert. -->
     
     <script>
         tailwind.config = {
@@ -117,6 +119,24 @@
         .profile-image-effect:hover {
             filter: grayscale(0%);
         }
+
+        /* Fallstudien Box Text Anpassung für weniger gequetschten Eindruck */
+        .case-study-text {
+            line-height: 1.6; /* Mehr Abstand */
+        }
+
+        /* Custom Styles für das Buchungs-Widget */
+        /* Wir zentrieren den Kalender, damit er im Rams/Babauta-Stil besser aussieht */
+        #calendar-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #calendar-iframe {
+            /* Beschränkung der Breite, um die hässliche Google-Randleiste zu vermeiden */
+            max-width: 600px; 
+            height: 100%;
+        }
     </style>
 </head>
 <body class="paper-texture font-sans antialiased relative">
@@ -124,8 +144,8 @@
     <!-- NAVIGATION -->
     <nav class="fixed w-full z-40 bg-[#F7F5F0]/90 backdrop-blur-md horizontal-line transition-all duration-300" id="navbar">
         <div class="max-w-screen-2xl mx-auto px-6 h-20 flex justify-between items-center">
-            <!-- NAME IN HIGHLIGHT-FARBE (GEÄNDERT) -->
-            <a href="#" class="font-serif font-bold text-lg tracking-[0.15em] uppercase text-clay hover:text-ink transition-colors z-50 relative nav-link">
+            <!-- NAME IN HIGHLIGHT-FARBE, SCHRIFTSTÄRKE KORRIGIERT -->
+            <a href="#" class="font-serif text-lg tracking-[0.15em] uppercase text-clay hover:text-ink transition-colors z-50 relative nav-link">
                 Maximilian Baaij
             </a>
             
@@ -133,6 +153,8 @@
                 <a href="#manifest" class="hover:text-clay hover:text-ink transition-colors nav-link">Manifest</a>
                 <a href="#profil" class="hover:text-clay hover:text-ink transition-colors nav-link">Profil</a>
                 <a href="#angebot" class="hover:text-clay hover:text-ink transition-colors nav-link">Wirken</a>
+                <!-- NEUER MENÜPUNKT FÜR FALLSTUDIEN -->
+                <a href="#fallstudien" class="hover:text-clay hover:text-ink transition-colors nav-link">Mandate</a>
                 <button onclick="openModal('booking-modal')" class="border border-clay text-clay px-4 py-2 hover:bg-clay hover:text-[#F7F5F0] transition-colors">
                     Termin
                 </button>
@@ -152,6 +174,8 @@
             <a href="#manifest" class="mobile-link font-serif text-3xl text-ink hover:text-clay transition-colors nav-link">Manifest</a>
             <a href="#profil" class="mobile-link font-serif text-3xl text-ink hover:text-clay transition-colors nav-link">Profil</a>
             <a href="#angebot" class="mobile-link font-serif text-3xl text-ink hover:text-clay transition-colors nav-link">Wirken</a>
+            <!-- NEUER MENÜPUNKT MOBILE -->
+            <a href="#fallstudien" class="mobile-link font-serif text-3xl text-ink hover:text-clay transition-colors nav-link">Mandate</a>
             <button onclick="openModal('booking-modal')" class="mobile-link font-serif text-3xl text-clay hover:text-ink transition-colors border-b border-clay pb-1">Termin buchen</button>
         </div>
         <div class="mt-12 text-xs uppercase tracking-widest text-stone">
@@ -199,7 +223,8 @@
             </div>
 
             <div class="hidden md:flex col-span-1 flex-col justify-end pb-12 items-center">
-                <div class="rotate-90 origin-bottom-right transform translate-x-2 whitespace-nowrap text-xs tracking-[0.3em] text-stone font-bold uppercase">
+                <!-- Dezenter gesetzt -->
+                <div class="rotate-90 origin-bottom-right transform translate-x-2 whitespace-nowrap text-xs tracking-[0.3em] text-stone/60 font-bold uppercase">
                     Est. 2025 &mdash; Holzgerlingen
                 </div>
             </div>
@@ -241,7 +266,7 @@
 
         <!-- PROFILE / HYBRID SECTION (mit Reveal Effect) -->
         <section id="profil" class="grid grid-cols-12 bg-[#F0EEE9] scroll-mt-20">
-            <!-- BILD-CONTAINER: Simplifizierte Rückkehr zum IMG-Tag mit CSS-Klassen -->
+            <!-- BILD-CONTAINER: Mit abgerundeten Ecken und stabilem Farbwechsel -->
             <div class="col-span-12 lg:col-span-6 border-r border-[#1F2933]/10 relative min-h-[400px] lg:min-h-[600px] group overflow-hidden">
                 <div class="absolute inset-0 bg-stone/20 flex items-center justify-center transition-all duration-700">
                     <!-- IMG-Tag mit Farbwechsel-Klassen und abgerundeten Ecken (rounded-xl) -->
@@ -270,17 +295,18 @@
                 </div>
 
                 <div class="space-y-8">
+                    <!-- ÜBERSCHRIFTEN KORRIGIERT -->
                     <div class="flex items-baseline border-b border-[#1F2933]/10 pb-6 group hover:border-clay transition-colors cursor-default">
-                        <span class="font-serif font-bold text-4xl w-20 text-ink/20 group-hover:text-ink/80 transition-colors">13</span>
+                        <span class="font-serif text-4xl w-20 text-ink/20 group-hover:text-ink/80 transition-colors">13</span>
                         <div>
-                            <h4 class="font-bold text-sm uppercase tracking-widest mb-1">Jahre Hard Business</h4>
+                            <h4 class="font-bold text-sm uppercase tracking-widest mb-1">Jahre Industrieexpertise</h4>
                             <p class="text-sm text-ink/60">Automotive Excellence, Projektleitung, Werksaufbau.</p>
                         </div>
                     </div>
                     <div class="flex items-baseline border-b border-[#1F2933]/10 pb-6 group hover:border-clay transition-colors cursor-default">
-                        <span class="font-serif font-bold text-4xl w-20 text-clay">04</span>
+                        <span class="font-serif text-4xl w-20 text-clay">04</span>
                         <div>
-                            <h4 class="font-bold text-sm uppercase tracking-widest mb-1 text-clay">Jahre Deep Dive</h4>
+                            <h4 class="font-bold text-sm uppercase tracking-widest mb-1 text-clay">Jahre Systemische Tiefe</h4>
                             <p class="text-sm text-ink/60">Transformation, Psychologie, Systemische Konfliktlösung.</p>
                         </div>
                     </div>
@@ -290,65 +316,133 @@
 
         <div class="horizontal-line"></div>
 
-        <!-- OFFERING / METHODOLOGY (mit Hover Cards) -->
+        <!-- OFFERING / METHODOLOGY (Layout und Texte überarbeitet) -->
         <section id="angebot" class="py-24 md:py-32 px-6 scroll-mt-20">
             <div class="max-w-4xl mx-auto text-center mb-20 reveal">
                 <h2 class="font-serif text-4xl md:text-5xl mb-6">Methodik der Archäologie</h2>
-                <p class="text-stone text-lg">Kein Bullshit-Bingo. Keine neuen Layer. Wir tragen ab.</p>
+                <p class="text-stone text-lg">Kein Bullshit-Bingo. Wir legen den Hebel frei.</p>
             </div>
 
+            <!-- Layout zurück zum Hover-Card-Design (wie gewünscht) -->
             <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <!-- Card 1 -->
+                <!-- Card 1 (Inhalt/Output überarbeitet) -->
                 <div class="group bg-white/50 p-8 border border-transparent hover:border-clay/20 hover:shadow-2xl hover:bg-white transition-all duration-500 hover:-translate-y-2 reveal" style="transition-delay: 0s;">
                     <div class="h-1 w-12 bg-stone/20 mb-6 group-hover:w-full group-hover:bg-clay transition-all duration-700 ease-out"></div>
                     <span class="text-xs font-bold text-stone uppercase tracking-widest">Phase 01</span>
-                    <h3 class="font-serif text-2xl mt-2 mb-4 group-hover:text-clay transition-colors">Diagnose</h3>
-                    <p class="text-ink/70 leading-relaxed text-sm">
-                        Radikale Bestandsaufnahme jenseits von Organigrammen. Wo liegen die echten, systemischen Konflikte?
+                    <h3 class="font-serif text-2xl mt-2 mb-4 group-hover:text-clay transition-colors">Diagnose & Tiefe</h3>
+                    <p class="text-ink/70 leading-relaxed text-sm mb-4">
+                        Radikale Bestandsaufnahme. Wo liegt die eigentliche Unwucht und welche Konflikte blockieren das System?
                     </p>
+                    <p class="font-bold text-xs uppercase tracking-widest text-clay">Output: Klarheit über den wahren Motor</p>
                 </div>
 
-                <!-- Card 2 -->
+                <!-- Card 2 (Inhalt/Output überarbeitet) -->
                 <div class="group bg-white/50 p-8 border border-transparent hover:border-clay/20 hover:shadow-2xl hover:bg-white transition-all duration-500 hover:-translate-y-2 reveal" style="transition-delay: 0.2s;">
                     <div class="h-1 w-12 bg-stone/20 mb-6 group-hover:w-full group-hover:bg-clay transition-all duration-700 ease-out"></div>
                     <span class="text-xs font-bold text-stone uppercase tracking-widest">Phase 02</span>
-                    <h3 class="font-serif text-2xl mt-2 mb-4 group-hover:text-clay transition-colors">Auflösung</h3>
-                    <p class="text-ink/70 leading-relaxed text-sm">
-                        Wir managen Konflikte nicht, wir lösen sie auf. Beseitigung dysfunktionaler Muster an der Wurzel.
+                    <h3 class="font-serif text-2xl mt-2 mb-4 group-hover:text-clay transition-colors">Auflösung & Fokus</h3>
+                    <p class="text-ink/70 leading-relaxed text-sm mb-4">
+                        Wir lösen dysfunktionale Muster an der Wurzel auf. Konflikte verwandeln sich in freigesetzte Energie und Fokus.
                     </p>
+                    <p class="font-bold text-xs uppercase tracking-widest text-clay">Output: Freigesetzte Potenziale & Agilität</p>
                 </div>
 
-                <!-- Card 3 -->
+                <!-- Card 3 (Titel & Inhalt/Output überarbeitet) -->
                 <div class="group bg-white/50 p-8 border border-transparent hover:border-clay/20 hover:shadow-2xl hover:bg-white transition-all duration-500 hover:-translate-y-2 reveal" style="transition-delay: 0.4s;">
                     <div class="h-1 w-12 bg-stone/20 mb-6 group-hover:w-full group-hover:bg-clay transition-all duration-700 ease-out"></div>
                     <span class="text-xs font-bold text-stone uppercase tracking-widest">Phase 03</span>
-                    <h3 class="font-serif text-2xl mt-2 mb-4 group-hover:text-clay transition-colors">Exzellenz</h3>
-                    <p class="text-ink/70 leading-relaxed text-sm">
-                        Übersetzung des freigelegten Purpose in operative KPIs. Befähigung von High-Performance-Teams.
+                    <h3 class="font-serif text-2xl mt-2 mb-4 group-hover:text-clay transition-colors">Exzellenz & Transformation</h3>
+                    <p class="text-ink/70 leading-relaxed text-sm mb-4">
+                        Das freigelegte System wird in operative Exzellenz übersetzt. Teams handeln aus intrinsischer Motivation und Klarheit.
                     </p>
+                    <p class="font-bold text-xs uppercase tracking-widest text-clay">Output: Wirksame und motivierte Teams</p>
                 </div>
             </div>
         </section>
 
-        <!-- CTA SECTION (mit Parallax-ish feel) -->
+        <div class="horizontal-line"></div>
+        
+        <!-- FALLSTUDIEN SEKTION (Texte sind jetzt sauber) -->
+        <section id="fallstudien" class="py-24 md:py-32 px-6 scroll-mt-20 bg-[#F0EEE9]">
+             <div class="max-w-4xl mx-auto text-center mb-16 reveal">
+                <!-- TITEL KORRIGIERT: Fokus auf die Herausforderung -->
+                <h2 class="font-serif text-4xl md:text-5xl mb-6">Typische Mandate</h2>
+                <p class="text-stone text-lg">So liegen Potenziale oft brach, bevor wir den Kern freilegen.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto text-ink/80">
+                <!-- Fallstudie 1 -->
+                <div class="bg-white p-6 shadow-xl border-l-4 border-clay transition-all duration-300 hover:scale-[1.02] reveal" style="transition-delay: 0s;">
+                    <p class="text-xs font-bold uppercase tracking-widest mb-2 text-clay">MANDAT I: Wachstumsschmerz</p>
+                    <h3 class="font-serif text-xl mb-3 text-ink">Vergiftete Kommunikation</h3>
+                    <div class="case-study-text text-sm">
+                        <p class="mb-3">
+                            <span class="font-bold">Ausgangslage:</span> Ein etabliertes Unternehmen erlebt starkes, ungeordnetes Wachstum. Die Prozesse sind gut, aber die Kommunikation ist vergiftet, Abteilungen arbeiten gegeneinander.
+                        </p>
+                        <p class="font-bold text-petrol">
+                             &rarr; <span class="font-bold">Effekt:</span> Blockierende Muster wurden aufgelöst. Die freigesetzte Energie führte zu 40% schnellerem Time-to-Market durch echte Agilität.
+                        </p>
+                    </div>
+                </div>
+                
+                 <!-- Fallstudie 2 -->
+                <div class="bg-white p-6 shadow-xl border-l-4 border-clay transition-all duration-300 hover:scale-[1.02] reveal" style="transition-delay: 0.2s;">
+                    <p class="text-xs font-bold uppercase tracking-widest mb-2 text-clay">MANDAT II: Kulturelle Blockade</p>
+                    <h3 class="font-serif text-xl mb-3 text-ink">Post-Merger-Paralyse</h3>
+                    <div class="case-study-text text-sm">
+                        <p class="mb-3">
+                            <span class="font-bold">Ausgangslage:</span> Nach der Fusion zweier starker Unternehmen mit unterschiedlichen Kulturen herrscht Misstrauen. Teams können sich nicht auf ein gemeinsames Ziel ausrichten.
+                        </p>
+                        <p class="font-bold text-petrol">
+                             &rarr; <span class="font-bold">Effekt:</span> Der gemeinsame Purpose wurde gefunden und emotional verankert. Das neue Team agiert kohärent und steigert die Performance nachhaltig.
+                        </p>
+                    </div>
+                </div>
+                
+                 <!-- Fallstudie 3 -->
+                <div class="bg-white p-6 shadow-xl border-l-4 border-clay transition-all duration-300 hover:scale-[1.02] reveal" style="transition-delay: 0.4s;">
+                    <p class="text-xs font-bold uppercase tracking-widest mb-2 text-clay">MANDAT III: Vision & Nachfolge</p>
+                    <h3 class="font-serif text-xl mb-3 text-ink">Lähmende Unsicherheit</h3>
+                    <div class="case-study-text text-sm">
+                        <p class="mb-3">
+                            <span class="font-bold">Ausgangslage:</span> Ein erfolgreiches Familienunternehmen steht vor der Übergabe. Die Vision ist verschwommen, die Führungsebene blockiert notwendige Veränderungen.
+                        </p>
+                        <p class="font-bold text-petrol">
+                             &rarr; <span class="font-bold">Effekt:</span> Die ursprüngliche Motivation und Vision wurde reaktiviert. Der Übergang zur nächsten Generation wurde erfolgreich und mit klarer strategischer Richtung gemeistert.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="horizontal-line"></div>
+
+        <!-- CTA SECTION -->
         <section id="kontakt" class="bg-[#1F2933] text-[#F7F5F0] py-24 md:py-32 px-6 text-center relative overflow-hidden scroll-mt-20">
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-20 bg-clay"></div>
 
             <div class="relative z-10 max-w-3xl mx-auto reveal">
                 <p class="text-stone uppercase tracking-[0.3em] text-xs mb-8">Der nächste Schritt</p>
-                <h2 class="font-serif text-4xl md:text-6xl mb-10 leading-tight">
+                
+                <!-- Microcopy angepasst -->
+                <p class="text-xl font-light text-stone/80 mb-4 max-w-xl mx-auto">
+                    Wenn Sie Verantwortung für die Kultur und die Performance Ihrer Organisation tragen,
+                </p>
+
+                <h2 class="font-serif text-4xl md:text-6xl mb-6 leading-tight">
                     Der Rahmen ist sekundär.<br>
                     <span class="text-stone">Der Hebel ist entscheidend.</span>
                 </h2>
-                <p class="text-xl font-light text-stone/80 mb-12 max-w-xl mx-auto">
-                    Ich suche Partner, die verstehen, dass "Soft Factors" die härteste Währung der Zukunft sind.
+                
+                <p class="text-base font-light text-stone/80 mb-12 max-w-xl mx-auto">
+                    Ich suche Partner, die verstehen, dass freigelegtes Potenzial die härteste Währung der Zukunft ist.
                 </p>
                 
                 <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
                     <button onclick="openModal('booking-modal')" class="inline-block border border-clay bg-clay text-[#F7F5F0] px-10 py-4 hover:bg-[#F7F5F0] hover:text-clay transition-all duration-300 uppercase tracking-widest text-xs font-bold">
                         Termin vereinbaren
                     </button>
-                    <a href="mailto:contact@maximilian-baaij.de" class="inline-block border border-[#F7F5F0] px-10 py-4 hover:bg-white hover:text-ink transition-all duration-300 uppercase tracking-widest text-xs font-bold">
+                    <a href="mailto:connect@maximilianbaaij.de" class="inline-block border border-[#F7F5F0] px-10 py-4 hover:bg-white hover:text-ink transition-all duration-300 uppercase tracking-widest text-xs font-bold">
                         E-Mail schreiben
                     </a>
                 </div>
@@ -358,8 +452,8 @@
         <!-- FOOTER -->
         <footer class="py-12 px-6 border-t border-[#1F2933]/10 text-center md:text-left grid grid-cols-1 md:grid-cols-2 gap-8 max-w-screen-2xl mx-auto bg-[#F7F5F0]">
             <div>
-                <!-- NAME IN HIGHLIGHT-FARBE (GEÄNDERT) -->
-                <p class="font-serif font-bold text-lg mb-2 uppercase tracking-[0.1em] text-clay">Maximilian Baaij</p>
+                <!-- NAME IN HIGHLIGHT-FARBE, SCHRIFTSTÄRKE KORRIGIERT -->
+                <p class="font-serif text-lg mb-2 uppercase tracking-[0.1em] text-clay">Maximilian Baaij</p>
                 <p class="text-xs text-stone uppercase tracking-widest mb-4">Purpose Archäologie & Transformation</p>
                  <a href="https://www.linkedin.com/in/maximilianbaaij/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-ink hover:text-clay transition-colors mt-2 group">
                     <svg class="w-4 h-4 mr-2 text-stone group-hover:text-clay transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
@@ -367,8 +461,10 @@
                 </a>
             </div>
             <div class="md:text-right text-sm text-ink/60 flex flex-col justify-end">
-                <a href="tel:+4915679742397" class="hover:text-clay transition-colors">+49 156 797 42397</a>
-                <a href="mailto:contact@maximilian-baaij.de" class="hover:text-clay transition-colors">contact@maximilian-baaij.de</a>
+                <!-- TELEFONNUMMER KORRIGIERT -->
+                <a href="tel:+4970317692265" class="hover:text-clay transition-colors">+49 7031 7692265</a>
+                <!-- EMAIL KORRIGIERT -->
+                <a href="mailto:connect@maximilianbaaij.de" class="hover:text-clay transition-colors">connect@maximilianbaaij.de</a>
                 
                 <div class="mt-6 flex flex-col md:flex-row justify-end gap-4 text-xs font-bold uppercase tracking-wider">
                     <button onclick="openModal('impressum-modal')" class="hover:text-clay text-stone transition-colors">Impressum</button>
@@ -406,8 +502,9 @@
         <div class="bg-[#F7F5F0] max-w-4xl w-full h-[90vh] overflow-hidden relative shadow-2xl flex flex-col">
             <div class="p-6 border-b border-ink/10 flex justify-between items-start bg-white">
                 <div>
-                    <h2 class="font-serif text-2xl text-ink mb-1">Erste Standortbestimmung</h2>
-                    <p class="text-sm text-ink/60">Lassen Sie uns in **45 Minuten** herausfinden, wo der Hebel liegt. Unverbindlich & Klartext.</p>
+                    <!-- Klarer Titel -->
+                    <h2 class="font-serif text-2xl text-ink mb-1">Strategische Standortbestimmung</h2>
+                    <p class="text-sm text-ink/60">Lassen Sie uns in 45 Minuten herausfinden, wo der Hebel liegt. Unverbindlich & Klartext.</p>
                 </div>
                 <button onclick="closeModal('booking-modal')" class="text-ink hover:text-clay transition-colors ml-4">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -418,8 +515,8 @@
                  <!-- Kalender wird hier per JS eingefügt, wenn Consent gegeben wurde -->
                  <div id="calendar-placeholder" class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center text-ink/70">
                     <svg class="w-12 h-12 text-clay mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <h3 class="font-bold text-ink uppercase tracking-widest text-sm mb-2">Externe Dienste blockiert</h3>
-                    <p class="text-sm max-w-sm">Um den interaktiven Kalender von Google für **45 Minuten** zu laden, benötigen wir Ihre Zustimmung zu externen Diensten (Art. 6 Abs. 1 lit. a DSGVO). Alternativ können Sie mir eine E-Mail schreiben.</p>
+                    <h3 class="font-bold text-ink uppercase tracking-widest text-sm mb-2">Externer Kalender blockiert</h3>
+                    <p class="text-sm max-w-sm">Um die Kalenderverfügbarkeit von Google zu laden, benötigen wir Ihre Zustimmung. Alternativ schreiben Sie mir eine E-Mail.</p>
                     <button onclick="handleCookieDecision('accept')" class="mt-4 text-xs uppercase tracking-widest font-bold bg-clay text-white px-6 py-2 transition-colors hover:bg-ink">Zustimmen & Kalender laden</button>
                  </div>
             </div>
@@ -437,7 +534,8 @@
                 <h3 class="font-bold text-xs uppercase tracking-widest mt-4">Angaben gemäß § 5 TMG</h3>
                 <p class="mb-4">Maximilian Baaij<br>Reußensteinweg 3<br>71088 Holzgerlingen</p>
                 <h3 class="font-bold text-xs uppercase tracking-widest mt-4">Kontakt</h3>
-                <p class="mb-4">Telefon: +49 156 797 42397<br>E-Mail: contact@maximilian-baaij.de</p>
+                <!-- KONTAKTDATEN KORRIGIERT -->
+                <p class="mb-4">Telefon: +49 7031 7692265<br>E-Mail: connect@maximilianbaaij.de</p>
                 <h3 class="font-bold text-xs uppercase tracking-widest mt-4">Umsatzsteuer-ID</h3>
                 <p class="mb-4">Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br>Wird nachgereicht / Beantragt</p>
                 <h3 class="font-bold text-xs uppercase tracking-widest mt-4">Haftung für Inhalte</h3>
@@ -473,7 +571,7 @@
                 <h3 class="font-bold text-xs uppercase tracking-widest mt-4">4. Online-Terminvereinbarung (Google Kalender)</h3>
                 <p class="text-xs mb-4">
                     Wir bieten Ihnen auf unserer Website die Möglichkeit, Termine direkt online zu vereinbaren. Hierfür nutzen wir den Dienst „Google Kalender“ der Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland.<br><br>
-                    Sobald Sie das Buchungsfenster öffnen, wird eine Verbindung zu den Servern von Google hergestellt, um die freien Termine anzuzeigen. Hierbei wird Ihre IP-Adresse an Google übertragen. Wenn Sie einen Termin buchen, werden die von Ihnen eingegebenen Daten (z.B. Name, E-Mail-Adresse) zur Terminorganisation an Google übermittelt und dort gespeichert.<br><br>
+                    Sobald Sie die Verfügbarkeit abrufen, wird eine Verbindung zu den Servern von Google hergestellt, um die freien Termine anzuzeigen. Hierbei wird Ihre IP-Adresse an Google übertragen. Wenn Sie einen Termin buchen, werden die von Ihnen eingegebenen Daten (z.B. Name, E-Mail-Adresse) zur Terminorganisation an Google übermittelt und dort gespeichert.<br><br>
                     Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Durchführung vorvertraglicher Maßnahmen) bzw. unser berechtigtes Interesse an einer effizienten Terminverwaltung (Art. 6 Abs. 1 lit. f DSGVO).<br>
                     Weitere Informationen finden Sie in der <a href="https://policies.google.com/privacy" target="_blank" class="underline hover:text-clay">Datenschutzerklärung von Google</a>.
                 </p>
@@ -537,6 +635,8 @@
                     // Prüfen, ob der Kalender bereits geladen wurde, um Duplikate zu vermeiden
                     if (!document.querySelector('#calendar-container iframe')) {
                         const iframe = document.createElement('iframe');
+                        iframe.id = "calendar-iframe";
+                        // Wichtig: Verwenden Sie hier IHRE Buchungsseite
                         iframe.src = "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1IORGkjpbUeAvySdPEUebkpZWiJRrgpVuzSgTgioC848e9psqieXoRxiXcrirmayorGbdfnDkR?gv=true";
                         iframe.style.border = "0";
                         iframe.width = "100%";
@@ -630,15 +730,8 @@
                  if(safeStorage.getItem('cookieConsent') === 'true') {
                     loadExternalServices(true);
                  } else {
-                    // Sorgt dafür, dass der Placeholder sichtbar ist, wenn keine Zustimmung vorliegt
-                    const placeholder = document.getElementById('calendar-placeholder');
-                    const container = document.getElementById('calendar-container');
-                    
-                    // Sicherstellen, dass keine alten Iframes mehr da sind
-                    container.innerHTML = '';
-                    if (placeholder) container.appendChild(placeholder); 
-                    
-                    if (placeholder) placeholder.style.display = 'flex';
+                    // WICHTIG: Wenn Consent fehlt, muss die Ladelogik den Placeholder sicherstellen
+                    loadExternalServices(false);
                  }
             }
         }
@@ -657,8 +750,7 @@
         
         // --- BILD-Lade-Check (Wichtig für den CSS-Background-Image-Wechsel) ---
         function checkImageLoad() {
-            // Funktion wird entfernt, da wir jetzt die zuverlässigere IMG-Tag-Methode nutzen
-            // Nur die Fallback-Anzeige wird bei onerror des IMG-Tags gesteuert.
+            // Funktion entfernt, da IMG-Tag-Methode genutzt wird
         }
 
         // --- SCROLL REVEAL ANIMATION & Init ---
