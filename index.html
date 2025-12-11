@@ -1,33 +1,705 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meine GitHub Pages Seite</title>
+    
+    <!-- SEO & Meta Tags -->
+    <title>Maximilian Baaij | Purpose Archäologie & Transformation</title>
+    <meta name="description" content="Maximilian Baaij - Purpose Archäologie. Human Systems Engineering und Transformation. Ich grabe nach dem Kern von Organisationen.">
+    <meta name="author" content="Maximilian Baaij">
+    <meta property="og:title" content="Maximilian Baaij | Purpose Archäologie">
+    <meta property="og:description" content="Vom Macher zum Strategen. Human Systems Engineering.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.linkedin.com/in/maximilianbaaij/">
+    
+    <!-- Tailwind CSS (Wird immer geladen, da essentiell für das Layout) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- HINWEIS: Google Fonts werden jetzt erst per JS geladen, um die DSGVO-Zustimmung abwarten. -->
+    <!-- Fallback-Fonts sind in der CSS-Konfiguration definiert. -->
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'paper': '#F7F5F0', 
+                        'ink': '#1F2933',   
+                        'stone': '#9AA5B1', 
+                        'clay': '#C05621',  
+                        'petrol': '#2C5282' 
+                    },
+                    fontFamily: {
+                        // Lato und Playfair Display sind hier als Fallback definiert, falls die Fonts nicht geladen werden
+                        'serif': ['"Playfair Display"', 'serif'],
+                        'sans': ['"Lato"', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+        body { background-color: #F7F5F0; color: #1F2933; }
+        .grid-line { border-right: 1px solid rgba(31, 41, 51, 0.08); }
+        .horizontal-line { border-bottom: 1px solid rgba(31, 41, 51, 0.08); }
+        
+        .paper-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='4' height='4' viewBox='0 0 4 4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3h1v1H1V3zm2-2h1v1H3V1z' fill='%231f2933' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
-        h1 {
-            color: #333;
+
+        /* Modal Transitions */
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Mobile Menu Transition */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+        }
+        #mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* SCROLL REVEAL CLASS (JS adds 'active') */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Cookie Banner Slide-in */
+        #cookie-banner {
+            transform: translateY(100%);
+            transition: transform 0.5s ease-in-out;
+            display: flex; /* Ensure display is flex initially */
+        }
+        #cookie-banner.show {
+            transform: translateY(0);
+        }
+        #cookie-banner.hidden-force {
+            display: none !important;
+        }
+        /* Style for blocked content */
+        .blocked-content {
+            background-color: #f3f4f6;
+            border: 2px solid #C05621;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        /* Das Bild selbst (img-Tag) und seine Hover-Effekte */
+        .profile-image-effect {
+            /* 3s Farbwechsel - Nutzung der CSS Transition-Property */
+            transition: filter 3s ease-out, opacity 0.3s ease-out; 
+            filter: grayscale(100%);
+        }
+        .profile-image-effect:hover {
+            filter: grayscale(0%);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Willkommen auf meiner Webseite! 🚀</h1>
-        <p>Das ist meine erste Webseite, gehostet auf GitHub Pages.</p>
-        <p>Du kannst diese Seite beliebig anpassen und erweitern.</p>
+<body class="paper-texture font-sans antialiased relative">
+
+    <!-- NAVIGATION -->
+    <nav class="fixed w-full z-40 bg-[#F7F5F0]/90 backdrop-blur-md horizontal-line transition-all duration-300" id="navbar">
+        <div class="max-w-screen-2xl mx-auto px-6 h-20 flex justify-between items-center">
+            <!-- NAME IN HIGHLIGHT-FARBE (GEÄNDERT) -->
+            <a href="#" class="font-serif font-bold text-lg tracking-[0.15em] uppercase text-clay hover:text-ink transition-colors z-50 relative nav-link">
+                Maximilian Baaij
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-12 text-xs uppercase tracking-[0.2em] font-bold text-stone">
+                <a href="#manifest" class="hover:text-clay hover:text-ink transition-colors nav-link">Manifest</a>
+                <a href="#profil" class="hover:text-clay hover:text-ink transition-colors nav-link">Profil</a>
+                <a href="#angebot" class="hover:text-clay hover:text-ink transition-colors nav-link">Wirken</a>
+                <button onclick="openModal('booking-modal')" class="border border-clay text-clay px-4 py-2 hover:bg-clay hover:text-[#F7F5F0] transition-colors">
+                    Termin
+                </button>
+            </div>
+
+            <button id="menu-btn" class="md:hidden z-50 text-ink focus:outline-none p-2" aria-label="Menü öffnen">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU OVERLAY -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-[#F7F5F0] flex flex-col justify-center items-center h-screen w-screen md:hidden">
+        <div class="flex flex-col space-y-8 text-center">
+            <a href="#manifest" class="mobile-link font-serif text-3xl text-ink hover:text-clay transition-colors nav-link">Manifest</a>
+            <a href="#profil" class="mobile-link font-serif text-3xl text-ink hover:text-clay transition-colors nav-link">Profil</a>
+            <a href="#angebot" class="mobile-link font-serif text-3xl text-ink hover:text-clay transition-colors nav-link">Wirken</a>
+            <button onclick="openModal('booking-modal')" class="mobile-link font-serif text-3xl text-clay hover:text-ink transition-colors border-b border-clay pb-1">Termin buchen</button>
+        </div>
+        <div class="mt-12 text-xs uppercase tracking-widest text-stone">
+            Purpose Archäologie
+        </div>
     </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="max-w-screen-2xl mx-auto border-l border-r border-[#1F2933]/10 min-h-screen pt-20">
+        
+        <!-- HERO SECTION -->
+        <header class="grid grid-cols-12 min-h-[85vh] relative overflow-hidden">
+            <!-- Decorative Background SVG -->
+            <div class="absolute right-[-10%] bottom-[-10%] w-[60%] h-[60%] opacity-[0.03] pointer-events-none animate-pulse-slow">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#1F2933" d="M45.7,-76.3C58.9,-69.3,69.1,-55.5,76.1,-40.8C83.1,-26.1,86.9,-10.5,84.4,4.2C81.9,18.9,73.1,32.7,63.1,44.2C53.1,55.7,41.9,64.9,29.3,69.7C16.7,74.5,2.7,74.9,-10.3,73.2C-23.3,71.5,-35.3,67.7,-46.3,60.2C-57.3,52.7,-67.3,41.5,-73.8,28.4C-80.3,15.3,-83.3,0.3,-79.7,-13.3C-76.1,-26.9,-65.9,-39.1,-54.2,-46.6C-42.5,-54.1,-29.3,-56.9,-16.9,-58.9C-4.5,-60.9,7.1,-62.1,19.8,-63.4" transform="translate(100 100) scale(1.1)" />
+                </svg>
+            </div>
+
+            <div class="hidden md:block col-span-1 grid-line"></div>
+            
+            <div class="col-span-12 md:col-span-10 grid-line flex flex-col justify-center px-6 md:px-16 py-20 relative z-10">
+                <p class="text-clay font-bold tracking-[0.2em] uppercase text-xs mb-6 animate-fade-in">Human Systems Engineering</p>
+                
+                <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-[1.1] mb-12 text-ink animate-fade-in" style="animation-delay: 0.2s;">
+                    Nicht erfinden.<br>
+                    <span class="italic text-stone/80">Freilegen.</span>
+                </h1>
+
+                <div class="md:max-w-xl animate-fade-in" style="animation-delay: 0.4s;">
+                    <p class="text-lg md:text-xl leading-relaxed text-ink/80 mb-8 border-l-2 border-clay pl-6">
+                        "Echter Wohlstand entsteht dort, wo Menschen wirksam sein dürfen. Ich bin <span class="font-bold text-ink">Purpose-Archäologe</span>. Ich grabe nach dem Kern von Organisationen, der unter Strukturen und Konflikten verborgen liegt."
+                    </p>
+                    
+                    <div class="flex gap-6 items-center">
+                        <a href="#angebot" class="text-xs font-bold uppercase tracking-widest border-b border-clay pb-1 text-clay hover:text-ink transition-colors nav-link">
+                            Methodik &rarr;
+                        </a>
+                        <button onclick="openModal('booking-modal')" class="text-xs font-bold uppercase tracking-widest text-stone hover:text-ink transition-colors flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            Kennenlernen
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden md:flex col-span-1 flex-col justify-end pb-12 items-center">
+                <div class="rotate-90 origin-bottom-right transform translate-x-2 whitespace-nowrap text-xs tracking-[0.3em] text-stone font-bold uppercase">
+                    Est. 2025 &mdash; Holzgerlingen
+                </div>
+            </div>
+        </header>
+
+        <div class="horizontal-line"></div>
+
+        <!-- MANIFEST SECTION (mit Reveal Effect) -->
+        <section id="manifest" class="grid grid-cols-12 py-24 md:py-32 scroll-mt-20">
+            <div class="hidden md:block col-span-1 grid-line"></div>
+            <div class="col-span-12 md:col-span-4 px-6 md:px-12 grid-line reveal">
+                <h2 class="font-serif text-4xl mb-6">Das Fundament.</h2>
+                <p class="text-stone font-bold text-sm uppercase tracking-widest mb-12">Meine Überzeugung</p>
+                <div class="w-12 h-1 bg-clay mb-8"></div>
+            </div>
+            <div class="col-span-12 md:col-span-6 px-6 md:px-16 reveal" style="transition-delay: 0.2s;">
+                <p class="text-2xl md:text-3xl font-serif leading-relaxed mb-12 text-ink">
+                    Alle Ressourcen für Erfolg und Wohlstand sind bereits vorhanden. Wir verwehren uns diesen Erfolg oft selbst.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-ink/70">
+                    <div>
+                        <h3 class="font-bold text-ink uppercase tracking-widest text-xs mb-4 flex items-center gap-2">
+                            <span class="w-2 h-2 bg-clay rounded-full"></span> Das Problem
+                        </h3>
+                        <p>Strukturelle Hürden und psychologische Blockaden. Wir managen Symptome, statt an den Kern zu gehen. Strategien scheitern nicht am Plan, sondern am Faktor Mensch.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-ink uppercase tracking-widest text-xs mb-4 flex items-center gap-2">
+                             <span class="w-2 h-2 bg-ink rounded-full"></span> Die Mission
+                        </h3>
+                        <p>Das Freilegen individueller und kollektiver Wirksamkeit. Konfliktauflösung und Potentialentfaltung an der Wurzel. Transformation von innen nach außen.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden md:block col-span-1"></div>
+        </section>
+
+        <div class="horizontal-line"></div>
+
+        <!-- PROFILE / HYBRID SECTION (mit Reveal Effect) -->
+        <section id="profil" class="grid grid-cols-12 bg-[#F0EEE9] scroll-mt-20">
+            <!-- BILD-CONTAINER: Simplifizierte Rückkehr zum IMG-Tag mit CSS-Klassen -->
+            <div class="col-span-12 lg:col-span-6 border-r border-[#1F2933]/10 relative min-h-[400px] lg:min-h-[600px] group overflow-hidden">
+                <div class="absolute inset-0 bg-stone/20 flex items-center justify-center transition-all duration-700">
+                    <!-- IMG-Tag mit Farbwechsel-Klassen und abgerundeten Ecken (rounded-xl) -->
+                    <img src="portrait.png" 
+                         alt="Maximilian Baaij - Purpose Archäologe" 
+                         class="absolute inset-0 w-full h-full object-cover object-top profile-image-effect rounded-xl"
+                         onerror="this.nextElementSibling.style.display='flex'; this.style.display='none';">
+                    
+                    <!-- Fallback-Placeholder (zeigt nur bei Ladefehler, bleibt sonst unsichtbar) -->
+                    <div class="text-center p-8 hidden w-full h-full flex-col justify-center items-center absolute inset-0 bg-[#F0EEE9]">
+                        <span class="block text-stone/40 font-serif font-bold text-6xl md:text-8xl tracking-tighter uppercase opacity-30 mix-blend-multiply leading-none">Macher</span>
+                        <span class="block text-clay/20 font-serif font-bold text-6xl md:text-8xl tracking-tighter uppercase opacity-30 mix-blend-multiply leading-none">&</span>
+                        <span class="block text-stone/40 font-serif font-bold text-6xl md:text-8xl tracking-tighter uppercase opacity-30 mix-blend-multiply leading-none">Stratege</span>
+                        <p class="text-xs text-red-500 mt-4 bg-white p-2 border border-red-200">Bild "portrait.png" nicht gefunden. Bitte Datei in den Ordner legen.</p>
+                     </div>
+                </div>
+            </div>
+            
+            <div class="col-span-12 lg:col-span-6 flex flex-col justify-center px-6 md:px-20 py-20 reveal">
+                <div class="mb-12">
+                    <span class="text-clay font-bold tracking-widest uppercase text-xs">Der Hybrid</span>
+                    <h2 class="font-serif text-4xl mt-4 mb-8">Vom Macher<br>zum Strategen.</h2>
+                    <p class="text-ink/80 text-lg leading-relaxed text-justified">
+                        Ich kenne beide Welten. Ich habe 13 Jahre lang den Druck der Fertigungslinie bei Daimler gespürt und Werke hochgezogen. Und ich habe 4 Jahre lang die Tiefen der menschlichen Psyche als Coach erforscht.
+                    </p>
+                </div>
+
+                <div class="space-y-8">
+                    <div class="flex items-baseline border-b border-[#1F2933]/10 pb-6 group hover:border-clay transition-colors cursor-default">
+                        <span class="font-serif font-bold text-4xl w-20 text-ink/20 group-hover:text-ink/80 transition-colors">13</span>
+                        <div>
+                            <h4 class="font-bold text-sm uppercase tracking-widest mb-1">Jahre Hard Business</h4>
+                            <p class="text-sm text-ink/60">Automotive Excellence, Projektleitung, Werksaufbau.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline border-b border-[#1F2933]/10 pb-6 group hover:border-clay transition-colors cursor-default">
+                        <span class="font-serif font-bold text-4xl w-20 text-clay">04</span>
+                        <div>
+                            <h4 class="font-bold text-sm uppercase tracking-widest mb-1 text-clay">Jahre Deep Dive</h4>
+                            <p class="text-sm text-ink/60">Transformation, Psychologie, Systemische Konfliktlösung.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="horizontal-line"></div>
+
+        <!-- OFFERING / METHODOLOGY (mit Hover Cards) -->
+        <section id="angebot" class="py-24 md:py-32 px-6 scroll-mt-20">
+            <div class="max-w-4xl mx-auto text-center mb-20 reveal">
+                <h2 class="font-serif text-4xl md:text-5xl mb-6">Methodik der Archäologie</h2>
+                <p class="text-stone text-lg">Kein Bullshit-Bingo. Keine neuen Layer. Wir tragen ab.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Card 1 -->
+                <div class="group bg-white/50 p-8 border border-transparent hover:border-clay/20 hover:shadow-2xl hover:bg-white transition-all duration-500 hover:-translate-y-2 reveal" style="transition-delay: 0s;">
+                    <div class="h-1 w-12 bg-stone/20 mb-6 group-hover:w-full group-hover:bg-clay transition-all duration-700 ease-out"></div>
+                    <span class="text-xs font-bold text-stone uppercase tracking-widest">Phase 01</span>
+                    <h3 class="font-serif text-2xl mt-2 mb-4 group-hover:text-clay transition-colors">Diagnose</h3>
+                    <p class="text-ink/70 leading-relaxed text-sm">
+                        Radikale Bestandsaufnahme jenseits von Organigrammen. Wo liegen die echten, systemischen Konflikte?
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="group bg-white/50 p-8 border border-transparent hover:border-clay/20 hover:shadow-2xl hover:bg-white transition-all duration-500 hover:-translate-y-2 reveal" style="transition-delay: 0.2s;">
+                    <div class="h-1 w-12 bg-stone/20 mb-6 group-hover:w-full group-hover:bg-clay transition-all duration-700 ease-out"></div>
+                    <span class="text-xs font-bold text-stone uppercase tracking-widest">Phase 02</span>
+                    <h3 class="font-serif text-2xl mt-2 mb-4 group-hover:text-clay transition-colors">Auflösung</h3>
+                    <p class="text-ink/70 leading-relaxed text-sm">
+                        Wir managen Konflikte nicht, wir lösen sie auf. Beseitigung dysfunktionaler Muster an der Wurzel.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="group bg-white/50 p-8 border border-transparent hover:border-clay/20 hover:shadow-2xl hover:bg-white transition-all duration-500 hover:-translate-y-2 reveal" style="transition-delay: 0.4s;">
+                    <div class="h-1 w-12 bg-stone/20 mb-6 group-hover:w-full group-hover:bg-clay transition-all duration-700 ease-out"></div>
+                    <span class="text-xs font-bold text-stone uppercase tracking-widest">Phase 03</span>
+                    <h3 class="font-serif text-2xl mt-2 mb-4 group-hover:text-clay transition-colors">Exzellenz</h3>
+                    <p class="text-ink/70 leading-relaxed text-sm">
+                        Übersetzung des freigelegten Purpose in operative KPIs. Befähigung von High-Performance-Teams.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA SECTION (mit Parallax-ish feel) -->
+        <section id="kontakt" class="bg-[#1F2933] text-[#F7F5F0] py-24 md:py-32 px-6 text-center relative overflow-hidden scroll-mt-20">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-20 bg-clay"></div>
+
+            <div class="relative z-10 max-w-3xl mx-auto reveal">
+                <p class="text-stone uppercase tracking-[0.3em] text-xs mb-8">Der nächste Schritt</p>
+                <h2 class="font-serif text-4xl md:text-6xl mb-10 leading-tight">
+                    Der Rahmen ist sekundär.<br>
+                    <span class="text-stone">Der Hebel ist entscheidend.</span>
+                </h2>
+                <p class="text-xl font-light text-stone/80 mb-12 max-w-xl mx-auto">
+                    Ich suche Partner, die verstehen, dass "Soft Factors" die härteste Währung der Zukunft sind.
+                </p>
+                
+                <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+                    <button onclick="openModal('booking-modal')" class="inline-block border border-clay bg-clay text-[#F7F5F0] px-10 py-4 hover:bg-[#F7F5F0] hover:text-clay transition-all duration-300 uppercase tracking-widest text-xs font-bold">
+                        Termin vereinbaren
+                    </button>
+                    <a href="mailto:contact@maximilian-baaij.de" class="inline-block border border-[#F7F5F0] px-10 py-4 hover:bg-white hover:text-ink transition-all duration-300 uppercase tracking-widest text-xs font-bold">
+                        E-Mail schreiben
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="py-12 px-6 border-t border-[#1F2933]/10 text-center md:text-left grid grid-cols-1 md:grid-cols-2 gap-8 max-w-screen-2xl mx-auto bg-[#F7F5F0]">
+            <div>
+                <!-- NAME IN HIGHLIGHT-FARBE (GEÄNDERT) -->
+                <p class="font-serif font-bold text-lg mb-2 uppercase tracking-[0.1em] text-clay">Maximilian Baaij</p>
+                <p class="text-xs text-stone uppercase tracking-widest mb-4">Purpose Archäologie & Transformation</p>
+                 <a href="https://www.linkedin.com/in/maximilianbaaij/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-ink hover:text-clay transition-colors mt-2 group">
+                    <svg class="w-4 h-4 mr-2 text-stone group-hover:text-clay transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    LinkedIn Profil
+                </a>
+            </div>
+            <div class="md:text-right text-sm text-ink/60 flex flex-col justify-end">
+                <a href="tel:+4915679742397" class="hover:text-clay transition-colors">+49 156 797 42397</a>
+                <a href="mailto:contact@maximilian-baaij.de" class="hover:text-clay transition-colors">contact@maximilian-baaij.de</a>
+                
+                <div class="mt-6 flex flex-col md:flex-row justify-end gap-4 text-xs font-bold uppercase tracking-wider">
+                    <button onclick="openModal('impressum-modal')" class="hover:text-clay text-stone transition-colors">Impressum</button>
+                    <button onclick="openModal('datenschutz-modal')" class="hover:text-clay text-stone transition-colors">Datenschutz</button>
+                    <!-- NEUER LINK FÜR COOKIE RESET -->
+                    <button onclick="showCookieBanner()" class="hover:text-clay text-stone transition-colors">Cookies</button>
+                </div>
+                <p class="mt-4 text-[10px] text-stone/50">&copy; 2025. All Rights Reserved.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- BACK TO TOP BUTTON -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'});" class="fixed bottom-6 right-6 bg-ink text-white p-3 shadow-lg hover:bg-clay transition-colors z-30 opacity-50 hover:opacity-100 hidden md:block" aria-label="Nach oben">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+    </button>
+
+    <!-- COOKIE BANNER (Professionalität & Rechtssicherheit) -->
+    <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6 bg-[#F7F5F0] border-t border-clay shadow-[0_-5px_20px_rgba(0,0,0,0.1)] flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="text-xs text-ink/80 max-w-3xl">
+            <strong class="uppercase tracking-widest text-clay block mb-1">Datenschutz-Hinweis</strong>
+            Wir nutzen Cookies und externe Dienste (Google Fonts, Google Kalender), um Ihnen die bestmögliche Erfahrung zu bieten. Mit Klick auf "Akzeptieren" stimmen Sie dem zu.
+            <button onclick="openModal('datenschutz-modal')" class="underline hover:text-clay ml-1">Mehr erfahren</button>
+        </div>
+        <div class="flex gap-4">
+            <button onclick="handleCookieDecision('reject')" class="text-xs uppercase tracking-widest font-bold text-stone hover:text-ink px-4 py-2">Ablehnen</button>
+            <button onclick="handleCookieDecision('accept')" class="text-xs uppercase tracking-widest font-bold bg-ink text-white hover:bg-clay px-6 py-2 transition-colors">Akzeptieren</button>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink/90 backdrop-blur-sm">
+        <div class="bg-[#F7F5F0] max-w-4xl w-full h-[90vh] overflow-hidden relative shadow-2xl flex flex-col">
+            <div class="p-6 border-b border-ink/10 flex justify-between items-start bg-white">
+                <div>
+                    <h2 class="font-serif text-2xl text-ink mb-1">Erste Standortbestimmung</h2>
+                    <p class="text-sm text-ink/60">Lassen Sie uns in **45 Minuten** herausfinden, wo der Hebel liegt. Unverbindlich & Klartext.</p>
+                </div>
+                <button onclick="closeModal('booking-modal')" class="text-ink hover:text-clay transition-colors ml-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="flex-1 bg-white relative" id="calendar-container">
+                 <!-- Kalender wird hier per JS eingefügt, wenn Consent gegeben wurde -->
+                 <div id="calendar-placeholder" class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center text-ink/70">
+                    <svg class="w-12 h-12 text-clay mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <h3 class="font-bold text-ink uppercase tracking-widest text-sm mb-2">Externe Dienste blockiert</h3>
+                    <p class="text-sm max-w-sm">Um den interaktiven Kalender von Google für **45 Minuten** zu laden, benötigen wir Ihre Zustimmung zu externen Diensten (Art. 6 Abs. 1 lit. a DSGVO). Alternativ können Sie mir eine E-Mail schreiben.</p>
+                    <button onclick="handleCookieDecision('accept')" class="mt-4 text-xs uppercase tracking-widest font-bold bg-clay text-white px-6 py-2 transition-colors hover:bg-ink">Zustimmen & Kalender laden</button>
+                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Impressum Modal -->
+    <div id="impressum-modal" class="modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink/90 backdrop-blur-sm">
+        <div class="bg-[#F7F5F0] max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 md:p-12 relative shadow-2xl">
+            <button onclick="closeModal('impressum-modal')" class="absolute top-4 right-4 text-ink hover:text-clay">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h2 class="font-serif text-3xl mb-6">Impressum</h2>
+            <div class="prose prose-sm text-ink/80">
+                <h3 class="font-bold text-xs uppercase tracking-widest mt-4">Angaben gemäß § 5 TMG</h3>
+                <p class="mb-4">Maximilian Baaij<br>Reußensteinweg 3<br>71088 Holzgerlingen</p>
+                <h3 class="font-bold text-xs uppercase tracking-widest mt-4">Kontakt</h3>
+                <p class="mb-4">Telefon: +49 156 797 42397<br>E-Mail: contact@maximilian-baaij.de</p>
+                <h3 class="font-bold text-xs uppercase tracking-widest mt-4">Umsatzsteuer-ID</h3>
+                <p class="mb-4">Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br>Wird nachgereicht / Beantragt</p>
+                <h3 class="font-bold text-xs uppercase tracking-widest mt-4">Haftung für Inhalte</h3>
+                <p class="text-xs mb-2">Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datenschutz Modal -->
+    <div id="datenschutz-modal" class="modal fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink/90 backdrop-blur-sm">
+        <div class="bg-[#F7F5F0] max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 md:p-12 relative shadow-2xl">
+            <button onclick="closeModal('datenschutz-modal')" class="absolute top-4 right-4 text-ink hover:text-clay">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h2 class="font-serif text-3xl mb-6">Datenschutzerklärung</h2>
+            <div class="prose prose-sm text-ink/80">
+                <h3 class="font-bold text-xs uppercase tracking-widest mt-4">1. Datenschutz auf einen Blick</h3>
+                <p class="text-xs mb-4">
+                    Allgemeine Hinweise: Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Verantwortlich für die Datenerfassung ist der Websitebetreiber (siehe Impressum).
+                </p>
+
+                <h3 class="font-bold text-xs uppercase tracking-widest mt-4">2. Hosting & Externe Dienste</h3>
+                <p class="text-xs mb-4">
+                    <strong>Google Fonts:</strong> Diese Seite nutzt zur einheitlichen Darstellung von Schriftarten so genannte Google Fonts. Beim Aufruf einer Seite lädt Ihr Browser die benötigten Web Fonts in ihren Browsercache. Zu diesem Zweck muss der von Ihnen verwendete Browser Verbindung zu den Servern von Google aufnehmen. Hierdurch erlangt Google Kenntnis darüber, dass über Ihre IP-Adresse diese Website aufgerufen wurde.<br>
+                    <strong>CDN (Content Delivery Networks):</strong> Wir setzen für die Auslieferung von CSS-Dateien (Tailwind) externe CDNs ein. Hierbei wird Ihre IP-Adresse an den jeweiligen Dienstleister übermittelt.
+                </p>
+
+                <h3 class="font-bold text-xs uppercase tracking-widest mt-4">3. Kontaktaufnahme</h3>
+                <p class="text-xs mb-4">
+                    Wenn Sie uns per E-Mail kontaktieren, werden Ihre Angaben inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.
+                </p>
+                
+                <h3 class="font-bold text-xs uppercase tracking-widest mt-4">4. Online-Terminvereinbarung (Google Kalender)</h3>
+                <p class="text-xs mb-4">
+                    Wir bieten Ihnen auf unserer Website die Möglichkeit, Termine direkt online zu vereinbaren. Hierfür nutzen wir den Dienst „Google Kalender“ der Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland.<br><br>
+                    Sobald Sie das Buchungsfenster öffnen, wird eine Verbindung zu den Servern von Google hergestellt, um die freien Termine anzuzeigen. Hierbei wird Ihre IP-Adresse an Google übertragen. Wenn Sie einen Termin buchen, werden die von Ihnen eingegebenen Daten (z.B. Name, E-Mail-Adresse) zur Terminorganisation an Google übermittelt und dort gespeichert.<br><br>
+                    Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Durchführung vorvertraglicher Maßnahmen) bzw. unser berechtigtes Interesse an einer effizienten Terminverwaltung (Art. 6 Abs. 1 lit. f DSGVO).<br>
+                    Weitere Informationen finden Sie in der <a href="https://policies.google.com/privacy" target="_blank" class="underline hover:text-clay">Datenschutzerklärung von Google</a>.
+                </p>
+
+                <div class="mt-8 pt-4 border-t border-ink/10 text-[10px] text-stone">
+                    Hinweis: Dies ist ein angepasster Muster-Auszug. Für vollständige Rechtssicherheit wird die Konsultation eines Fachanwalts empfohlen.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // --- Safe Storage Wrapper (Bulletproof) ---
+        const safeStorage = {
+            setItem: function(key, value) {
+                try {
+                    if(window.localStorage) {
+                        window.localStorage.setItem(key, value);
+                    }
+                } catch (e) {
+                    console.log('Storage unavailable');
+                }
+            },
+            getItem: function(key) {
+                try {
+                    return window.localStorage ? window.localStorage.getItem(key) : null;
+                } catch (e) {
+                    return null;
+                }
+            },
+            removeItem: function(key) {
+                try {
+                    if(window.localStorage) {
+                        window.localStorage.removeItem(key);
+                    }
+                } catch (e) { }
+            }
+        };
+
+        // --- EXTERNEN DIENSTE LADEN / BLOCKIEREN ---
+        function loadExternalServices(consentGiven) {
+            if (consentGiven) {
+                // 1. Google Fonts laden (für das gesamte Design)
+                const fontLink = document.createElement('link');
+                fontLink.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400&display=swap";
+                fontLink.rel = "stylesheet";
+                document.head.appendChild(fontLink);
+                
+                // 2. Kalender laden (ersetzt den Platzhalter)
+                const container = document.getElementById('calendar-container');
+                const placeholder = document.getElementById('calendar-placeholder');
+                
+                // Nur laden, wenn der Container existiert (wichtig, um Fehler zu vermeiden)
+                if (container) {
+                    // Placeholder entfernen, falls vorhanden
+                    if (placeholder) {
+                        placeholder.style.display = 'none';
+                    }
+                    
+                    // Prüfen, ob der Kalender bereits geladen wurde, um Duplikate zu vermeiden
+                    if (!document.querySelector('#calendar-container iframe')) {
+                        const iframe = document.createElement('iframe');
+                        iframe.src = "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1IORGkjpbUeAvySdPEUebkpZWiJRrgpVuzSgTgioC848e9psqieXoRxiXcrirmayorGbdfnDkR?gv=true";
+                        iframe.style.border = "0";
+                        iframe.width = "100%";
+                        iframe.height = "100%";
+                        iframe.frameborder = "0";
+                        container.appendChild(iframe);
+                    }
+                }
+
+            } else {
+                // Dienste bleiben blockiert, Fonts auf Fallback. Kalender zeigt Placeholder.
+                const container = document.getElementById('calendar-container');
+                const placeholder = document.getElementById('calendar-placeholder');
+
+                if (container && placeholder) {
+                     placeholder.style.display = 'flex';
+                }
+            }
+        }
+        
+        // --- Cookie Banner Logic ---
+        function handleCookieDecision(decision) {
+            const banner = document.getElementById('cookie-banner');
+            
+            // 1. UI First: Banner ausblenden
+            banner.classList.remove('show');
+            banner.classList.add('hidden-force');
+            
+            // 2. Entscheidung speichern & Dienste laden/blockieren
+            if (decision === 'accept') {
+                safeStorage.setItem('cookieConsent', 'true');
+                loadExternalServices(true);
+            } else {
+                // Hier speichern wir explizit, dass der Nutzer abgelehnt hat.
+                safeStorage.setItem('cookieConsent', 'false');
+                loadExternalServices(false);
+            }
+        }
+
+        // Neue Funktion zum Öffnen der Einstellungen / Banner resetten
+        function showCookieBanner() {
+            safeStorage.removeItem('cookieConsent');
+            const banner = document.getElementById('cookie-banner');
+            banner.classList.remove('hidden-force');
+            // Timeout, um sicherzustellen, dass die CSS-Klasse richtig angewendet wird
+            setTimeout(() => banner.classList.add('show'), 10);
+        }
+
+        // --- Mobile Menu Toggle ---
+        const btn = document.getElementById('menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        // 'nav-link' Klasse für alle internen Navigationslinks hinzugefügt
+        const links = document.querySelectorAll('.mobile-link, .nav-link'); 
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('open');
+        });
+
+        // Event Listener für Smooth Scroll auf allen Navigationslinks
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Nur interne Anker-Links behandeln
+                const hash = this.hash;
+                if (hash && hash.startsWith('#')) {
+                    e.preventDefault();
+                    
+                    // Optional: Mobile Menü schließen
+                    if(menu.classList.contains('open')) {
+                        menu.classList.remove('open');
+                    }
+
+                    // Smooth Scroll ausführen
+                    const targetElement = document.querySelector(hash);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80, // 80px für die feste Navbar
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // --- Modal Logic ---
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+            
+            // Sonderfall Buchungs-Modal: Kalender laden oder Platzhalter zeigen
+            if (id === 'booking-modal') {
+                 if(safeStorage.getItem('cookieConsent') === 'true') {
+                    loadExternalServices(true);
+                 } else {
+                    // Sorgt dafür, dass der Placeholder sichtbar ist, wenn keine Zustimmung vorliegt
+                    const placeholder = document.getElementById('calendar-placeholder');
+                    const container = document.getElementById('calendar-container');
+                    
+                    // Sicherstellen, dass keine alten Iframes mehr da sind
+                    container.innerHTML = '';
+                    if (placeholder) container.appendChild(placeholder); 
+                    
+                    if (placeholder) placeholder.style.display = 'flex';
+                 }
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = ''; 
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        // --- BILD-Lade-Check (Wichtig für den CSS-Background-Image-Wechsel) ---
+        function checkImageLoad() {
+            // Funktion wird entfernt, da wir jetzt die zuverlässigere IMG-Tag-Methode nutzen
+            // Nur die Fallback-Anzeige wird bei onerror des IMG-Tags gesteuert.
+        }
+
+        // --- SCROLL REVEAL ANIMATION & Init ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check initial consent status
+            if (safeStorage.getItem('cookieConsent') === 'true') {
+                loadExternalServices(true);
+                // Banner sofort verstecken, wenn true
+                const banner = document.getElementById('cookie-banner');
+                banner.classList.add('hidden-force');
+            } else if (safeStorage.getItem('cookieConsent') === 'false') {
+                 // Banner ist versteckt, aber es ist keine Zustimmung gegeben, also nichts laden
+                 const banner = document.getElementById('cookie-banner');
+                 banner.classList.add('hidden-force');
+            } else {
+                // Kein Consent: Banner anzeigen
+                const banner = document.getElementById('cookie-banner');
+                setTimeout(() => {
+                    banner.classList.add('show');
+                }, 1000);
+            }
+
+            // Scroll Reveal Init
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach(el => observer.observe(el));
+        });
+    </script>
 </body>
 </html>
